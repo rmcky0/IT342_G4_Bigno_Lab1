@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import Register from './pages/Register';
+import Register from './pages/Register'; 
+import Login from './pages/Login';
 
 function App() {
   return (
@@ -21,7 +22,7 @@ function App() {
           <Route path="/" element={<h1>Welcome to Mini App. Please Login or Register.</h1>} />
           <Route path="/register" element={<Register />} />
           {/* Login route is ignored for now as requested */}
-          <Route path="/login" element={<h2>Login Page (Work in Progress)</h2>} />
+          <Route path="/login" element={<Login />} />
         </Routes>
       </div>
     </Router>
