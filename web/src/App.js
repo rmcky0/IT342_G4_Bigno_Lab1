@@ -23,6 +23,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           {/* Login route is ignored for now as requested */}
           <Route path="/login" element={<Login />} />
+          <Route path="/dashboard" element={<Dashboard />} />
         </Routes>
       </div>
     </Router>
