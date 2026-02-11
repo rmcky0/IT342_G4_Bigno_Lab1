@@ -59,6 +59,9 @@ const Dashboard = () => {
             <strong>Username:</strong> {user.username}
           </p>
           <p style={{ margin: "6px 0" }}>
+            <strong>Email:</strong> {user.email || "(not available)"}
+          </p>
+          <p style={{ margin: "6px 0" }}>
             <strong>Status:</strong> Authenticated
           </p>
         </div>

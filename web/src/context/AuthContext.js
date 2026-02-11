@@ -8,17 +8,48 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Check if user is logged in on mount
-    const currentUser = authService.getCurrentUser();
-    setUser(currentUser);
-    setLoading(false);
+    // Check if user is logged in on mount (try backend /me first)
+    let mounted = true;
+    (async () => {
+      try {
+        const fetched = await authService.fetchCurrentUser();
+        if (mounted && fetched) {
+          setUser(fetched);
+          setLoading(false);
+          return;
+        }
+      } catch (e) {
+        // ignore and fallback to token-derived user
+      }
+
+      const currentUser = authService.getCurrentUser();
+      if (mounted) {
+        setUser(currentUser);
+        setLoading(false);
+      }
+    })();
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    const handleAppLogout = () => {
+      setUser(null);
+    };
+
+    window.addEventListener("app:logout", handleAppLogout);
+    return () => {
+      window.removeEventListener("app:logout", handleAppLogout);
+    };
   }, []);
 
   const login = async (username, password) => {
     try {
       const response = await authService.login(username, password);
-      const currentUser = authService.getCurrentUser();
-      setUser(currentUser);
+      // try to get authoritative user info from backend
+      const fetched = await authService.fetchCurrentUser();
+      setUser(fetched || authService.getCurrentUser());
       return { success: true, data: response };
     } catch (error) {
       const serverMsg =
