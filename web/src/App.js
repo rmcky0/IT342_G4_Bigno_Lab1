@@ -7,8 +7,7 @@ import {
 } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
-import Register from "./pages/Register";
-import Login from "./pages/Login";
+import AuthPage from "./pages/AuthPage";
 import Dashboard from "./pages/Dashboard";
 
 function App() {
@@ -17,8 +16,8 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Navigate to="/login" replace />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<AuthPage />} />
+          <Route path="/login" element={<AuthPage />} />
           <Route
             path="/dashboard"
             element={
