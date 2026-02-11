@@ -1,7 +1,10 @@
 import axios from "axios";
 
+const BASE_URL = "http://localhost:8080/api";
+
 const apiClient = axios.create({
-  baseURL: "http://localhost:8080/api",
+  baseURL: BASE_URL,
+  withCredentials: false,
 });
 
 apiClient.interceptors.request.use(
@@ -16,12 +19,20 @@ apiClient.interceptors.request.use(
   (error) => Promise.reject(error),
 );
 
-// apiClient.interceptors.response.use(
-//   (response) => response,
-//   (error) => {
-//     // optional: if (error.response?.status === 401) { /* handle logout */ }
-//     return Promise.reject(error);
-//   },
-// );
+apiClient.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    const status = error?.response?.status;
+    if (status === 401) {
+      localStorage.removeItem("token");
+      try {
+        window.dispatchEvent(
+          new CustomEvent("app:logout", { detail: { reason: "unauthorized" } }),
+        );
+      } catch (e) {}
+    }
+    return Promise.reject(error);
+  },
+);
 
 export default apiClient;
