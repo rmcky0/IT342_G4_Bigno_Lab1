@@ -1,9 +1,9 @@
 package com.miniapp.backend.controllers;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -59,6 +59,21 @@ public class AuthController {
             return ResponseEntity.ok(new MessageResponse("Logged out successfully"));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(e.getMessage()));
+        }
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<?> me(@RequestHeader(value = "Authorization", required = false) String authorization) {
+        try {
+            User user = authService.getUserFromAuthorization(authorization);
+            return ResponseEntity.ok(new AuthResponse(
+                "OK",
+                user.getUserId(),
+                user.getUsername(),
+                user.getEmail()
+            ));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponse(e.getMessage()));
         }
     }
 
