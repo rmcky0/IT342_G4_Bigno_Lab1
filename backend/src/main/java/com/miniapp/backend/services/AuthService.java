@@ -52,7 +52,12 @@ public class AuthService {
         return tokenProvider.generateToken(user);
     }
     
-    public void logout(String token) {
+    public void logout(String authorizationHeader) {
+        if (authorizationHeader == null) return;
+        String token = authorizationHeader;
+        if (token.startsWith("Bearer ")) {
+            token = token.substring(7);
+        }
         tokenProvider.invalidateToken(token);
     }
 }
