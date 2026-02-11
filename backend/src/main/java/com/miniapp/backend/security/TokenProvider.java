@@ -29,11 +29,20 @@ public class TokenProvider {
 
     private Key signingKey;
 
-    // Optional revocation list (in-memory). For production use persistent store.
     private Set<String> invalidatedTokens = ConcurrentHashMap.newKeySet();
 
     @PostConstruct
     public void init() {
+        if (secretKey == null || secretKey.isBlank() || "defaultSecretKey".equals(secretKey)) {
+            throw new IllegalStateException("JWT secret not configured. Set JWT_SECRET environment variable to a strong secret.");
+        }
+        if (secretKey.getBytes(StandardCharsets.UTF_8).length < 32) {
+            throw new IllegalStateException("JWT secret is too short. Provide at least 256 bits (32 bytes) of secret data.");
+        }
+        if (expirationTime <= 0) {
+            throw new IllegalStateException("JWT expiration must be a positive number of milliseconds. Set JWT_EXPIRATION environment variable.");
+        }
+
         signingKey = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
     }
 
