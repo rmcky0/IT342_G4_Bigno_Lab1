@@ -71,19 +71,19 @@ const AuthPage = () => {
         <div className="auth-tabs" role="tablist">
           <button
             type="button"
-            className={`auth-tab ${mode === "register" ? "active" : ""}`}
-            onClick={() => setMode("register")}
-            aria-selected={mode === "register"}
-          >
-            Sign up
-          </button>
-          <button
-            type="button"
             className={`auth-tab ${mode === "login" ? "active" : ""}`}
             onClick={() => setMode("login")}
             aria-selected={mode === "login"}
           >
-            Sign in
+            Log in
+          </button>
+          <button
+            type="button"
+            className={`auth-tab ${mode === "register" ? "active" : ""}`}
+            onClick={() => setMode("register")}
+            aria-selected={mode === "register"}
+          >
+            Register
           </button>
         </div>
 
