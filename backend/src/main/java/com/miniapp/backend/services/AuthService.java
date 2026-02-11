@@ -8,6 +8,7 @@ import com.miniapp.backend.dtos.RegisterRequest;
 import com.miniapp.backend.models.User;
 import com.miniapp.backend.repositories.UserRepository;
 import com.miniapp.backend.security.PasswordEncoder;
+import com.miniapp.backend.security.PasswordService;
 import com.miniapp.backend.security.TokenProvider;
 
 @Service
@@ -17,6 +18,9 @@ public class AuthService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private PasswordService passwordService;
 
     @Autowired
     private TokenProvider tokenProvider;
@@ -43,8 +47,8 @@ public class AuthService {
             .or(() -> userRepository.findByEmail(request.getUsername()))
             .orElseThrow(() -> new RuntimeException("Invalid credentials"));
         
-        // Validate password
-        if (!passwordEncoder.matches(request.getPassword(), user.getPasswordHash())) {
+        // Validate password via dedicated PasswordService
+        if (!passwordService.verify(user, request.getPassword())) {
             throw new RuntimeException("Invalid credentials");
         }
         
