@@ -230,10 +230,12 @@ body {
 }
 
 .auth-error {
-  color: #f8fafc;
-  opacity: 0.8;
-  font-size: 0.85rem;
+  font-style: italic;
+  color: #ff567a;
+  opacity: 1;
+  font-size: 0.95rem;
   margin-bottom: 10px;
+  font-weight: 600;
 }
 
 .auth-card-glow {

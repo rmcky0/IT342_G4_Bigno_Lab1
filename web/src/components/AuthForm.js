@@ -12,6 +12,22 @@ const AuthForm = ({ mode = "login", onSubmit, loading }) => {
   const submit = async (e) => {
     e.preventDefault();
     setError("");
+    // client-side validation for registration
+    if (mode === "register") {
+      if (!form.username?.trim()) {
+        setError("Please enter a username");
+        return;
+      }
+      if (!form.email?.trim()) {
+        setError("Please enter your email");
+        return;
+      }
+      if ((form.password || "").length < 8) {
+        setError("Password must be at least 8 characters");
+        return;
+      }
+    }
+
     try {
       await onSubmit(
         mode === "login"
@@ -40,7 +56,7 @@ const AuthForm = ({ mode = "login", onSubmit, loading }) => {
         <>
           <h2 className="auth-title">Welcome back</h2>
           <p className="auth-desc">
-            Sign in to reconnect with your protected workspace.
+            Log in to reconnect with your protected workspace.
           </p>
         </>
       )}
@@ -50,7 +66,7 @@ const AuthForm = ({ mode = "login", onSubmit, loading }) => {
       <form onSubmit={submit}>
         <div className="auth-fields">
           {mode === "register" && (
-            <div className="auth-field">
+            <div className="auth-field full">
               <label className="sr-only" htmlFor="auth-username">
                 Username
               </label>
@@ -69,7 +85,7 @@ const AuthForm = ({ mode = "login", onSubmit, loading }) => {
           )}
 
           {mode === "register" && (
-            <div className="auth-field">
+            <div className="auth-field full">
               <label className="sr-only" htmlFor="auth-email">
                 Email
               </label>
@@ -167,11 +183,11 @@ const AuthForm = ({ mode = "login", onSubmit, loading }) => {
         <button className="auth-button" type="submit" disabled={loading}>
           {loading
             ? mode === "login"
-              ? "Signing in..."
+              ? "Logging in..."
               : "Creating account..."
             : mode === "login"
-              ? "Sign in"
-              : "Create an account"}
+              ? "Log in"
+              : "Register"}
         </button>
       </form>
     </div>
