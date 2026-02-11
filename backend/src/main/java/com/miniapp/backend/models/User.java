@@ -2,6 +2,8 @@ package com.miniapp.backend.models;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -23,6 +25,7 @@ public class User {
     @Column(unique = true, nullable = false)
     private String email;
 
+    @JsonIgnore
     @Column(nullable = false)
     private String passwordHash;
 
@@ -46,6 +49,8 @@ public class User {
     public String getEmail() {
         return email;
     }
+
+    public LocalDateTime getCreatedAt() { return createdAt; }
 
     // Setters
     public void setUsername(String username) {
