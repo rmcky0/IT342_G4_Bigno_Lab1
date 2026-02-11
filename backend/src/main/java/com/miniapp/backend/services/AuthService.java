@@ -64,5 +64,19 @@ public class AuthService {
         }
         tokenProvider.invalidateToken(token);
     }
+
+    public User getUserFromAuthorization(String authorizationHeader) {
+        if (authorizationHeader == null) throw new RuntimeException("Missing Authorization header");
+        String token = authorizationHeader;
+        if (token.startsWith("Bearer ")) {
+            token = token.substring(7);
+        }
+        if (!tokenProvider.validateToken(token)) {
+            throw new RuntimeException("Invalid token");
+        }
+        Long userId = tokenProvider.getUserIdFromToken(token);
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+    }
 }
 
